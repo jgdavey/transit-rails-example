@@ -1,0 +1,61 @@
+<%= link_to 'New Post', new_post_path %>
+
+<h1>From JSON</h1>
+<table id="posts-json">
+  <thead></thead>
+  <tbody></tbody>
+</table>
+
+<h1>From Transit</h1>
+<table id="posts-transit">
+  <thead></thead>
+  <tbody></tbody>
+</table>
+
+<script type="text/javascript" src="http://cdn.cognitect.com/transit/transit-0.8.717.js"></script>
+
+
+<script type="text/javascript">
+  $.ajax("/posts.transit", {
+    dataType: "text",
+    success: function(data) {
+      var reader = transit.reader("json");
+      var $posts = $("#posts-transit tbody");
+      var parsed = reader.read(data);
+      var keys = parsed[0].keySet();
+      var $header = $("#posts-transit thead").append("<tr/>");
+      keys.forEach(function(k) {
+        $header.append("<th>" + k + "</th>");
+      });
+
+      parsed.slice(0,5).forEach(function(p) {
+        var $row = $posts.append("<tr/>");
+        keys.forEach(function(k) {
+          $row.append("<td>" + p.get(k) + "</td>");
+        });
+      });
+    }
+   });
+
+  $.ajax("/posts.json", {
+    dataType: "json",
+    success: function(data) {
+      var $posts = $("#posts-json tbody");
+      var first = data[0];
+      var keys = [];
+      for (var k in first) {
+        keys.push(k);
+      };
+      var $header = $("#posts-json thead").append("<tr/>");
+      keys.forEach(function(k) {
+        $header.append("<th>" + k + "</th>");
+      });
+      data.slice(0,5).forEach(function(p) {
+        var $row = $posts.append("<tr/>");
+        keys.forEach(function(k) {
+          $row.append("<td>" + p[k] + "</td>");
+        });
+      });
+    }
+   });
+</script>
