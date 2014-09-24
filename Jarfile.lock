@@ -1,0 +1,35 @@
+---
+version: 0.10.0
+groups:
+  default:
+    dependencies:
+    - com.cognitect:transit-java:jar:0.8.269
+    - com.fasterxml.jackson.core:jackson-annotations:jar:2.3.0
+    - com.fasterxml.jackson.core:jackson-core:jar:2.3.2
+    - com.fasterxml.jackson.core:jackson-databind:jar:2.3.2
+    - com.fasterxml.jackson.datatype:jackson-datatype-json-org:jar:2.3.2
+    - com.googlecode.json-simple:json-simple:jar:1.1.1
+    - commons-codec:commons-codec:jar:1.8
+    - org.apache.directory.studio:org.apache.commons.codec:jar:1.8
+    - org.javassist:javassist:jar:3.18.1-GA
+    - org.json:json:jar:20090211
+    - org.msgpack:msgpack:jar:0.6.10
+    artifacts:
+    - jar:com.cognitect:transit-java:jar:0.8.269:
+        transitive:
+          org.msgpack:msgpack:jar:0.6.10:
+            org.javassist:javassist:jar:3.18.1-GA: {}
+            com.googlecode.json-simple:json-simple:jar:1.1.1: {}
+          com.fasterxml.jackson.datatype:jackson-datatype-json-org:jar:2.3.2:
+            com.fasterxml.jackson.core:jackson-databind:jar:2.3.2:
+              com.fasterxml.jackson.core:jackson-annotations:jar:2.3.0: {}
+            org.json:json:jar:20090211: {}
+            com.fasterxml.jackson.core:jackson-core:jar:2.3.2: {}
+          org.apache.directory.studio:org.apache.commons.codec:jar:1.8:
+            commons-codec:commons-codec:jar:1.8: {}
+  development:
+    dependencies:
+    - org.jruby:jruby-complete:jar:1.7.13
+    artifacts:
+    - jar:org.jruby:jruby-complete:jar:1.7.13:
+        transitive: {}
