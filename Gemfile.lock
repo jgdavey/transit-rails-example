@@ -1,3 +1,9 @@
+PATH
+  remote: ../transit-rails
+  specs:
+    transit-rails (0.8.2)
+      transit-ruby (~> 0.8, >= 0.8.567)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -113,8 +119,6 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.1)
-    transit-rails (0.8.2)
-      transit-ruby (~> 0.8, >= 0.8.567)
     transit-ruby (0.8.591)
       addressable (~> 2.3.6)
       msgpack (~> 0.5.8)
@@ -131,7 +135,7 @@ DEPENDENCIES
   pry-rails
   rails (~> 4.2.0)
   sass-rails
-  transit-rails (~> 0.8.1)
+  transit-rails (~> 0.8.1)!
 
 BUNDLED WITH
    1.10.6

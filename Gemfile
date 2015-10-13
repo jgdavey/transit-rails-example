@@ -6,7 +6,7 @@ gem 'sass-rails'
 
 gem 'jquery-rails'
 
-gem 'transit-rails', '~> 0.8.1'
+gem 'transit-rails', '~> 0.8.1', path: '../transit-rails'
 
 group :development do
   gem 'pry-rails'
