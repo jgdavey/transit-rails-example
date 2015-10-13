@@ -12,27 +12,35 @@
   <tbody></tbody>
 </table>
 
+<%= link_to 'Create Post with random data', posts_path, id: "create_random" %>
+
 <!-- Make sure to include transit-js: http://cdn.cognitect.com/transit/transit-0.8.837-min.js -->
 
 <script type="text/javascript">
+  var getRandom = function(array) {
+    return array[Math.floor(Math.random()*array.length)];
+  };
+
   $.ajax("/posts.transit", {
     dataType: "text",
     success: function(data) {
       var reader = transit.reader("json");
       var $posts = $("#posts-transit tbody");
       var parsed = reader.read(data);
-      var keys = parsed[0].keySet();
-      var $header = $("#posts-transit thead").append("<tr/>");
-      keys.forEach(function(k) {
-        $header.append("<th>" + k + "</th>");
-      });
-
-      parsed.slice(0,5).forEach(function(p) {
-        var $row = $posts.append("<tr/>");
+      if (parsed.length) {
+        var keys = parsed[0].keySet();
+        var $header = $("#posts-transit thead").append("<tr/>");
         keys.forEach(function(k) {
-          $row.append("<td>" + p.get(k) + "</td>");
+          $header.append("<th>" + k + "</th>");
         });
-      });
+
+        parsed.slice(0,5).forEach(function(p) {
+          var $row = $posts.append("<tr/>");
+          keys.forEach(function(k) {
+            $row.append("<td>" + p.get(k) + "</td>");
+          });
+        });
+      }
     }
    });
 
@@ -40,21 +48,47 @@
     dataType: "json",
     success: function(data) {
       var $posts = $("#posts-json tbody");
-      var first = data[0];
-      var keys = [];
-      for (var k in first) {
-        keys.push(k);
-      };
-      var $header = $("#posts-json thead").append("<tr/>");
-      keys.forEach(function(k) {
-        $header.append("<th>" + k + "</th>");
-      });
-      data.slice(0,5).forEach(function(p) {
-        var $row = $posts.append("<tr/>");
+      if (data.length) {
+        var first = data[0];
+        var keys = [];
+        for (var k in first) {
+          keys.push(k);
+        };
+        var $header = $("#posts-json thead").append("<tr/>");
         keys.forEach(function(k) {
-          $row.append("<td>" + p[k] + "</td>");
+          $header.append("<th>" + k + "</th>");
         });
-      });
+        data.slice(0,5).forEach(function(p) {
+          var $row = $posts.append("<tr/>");
+          keys.forEach(function(k) {
+            $row.append("<td>" + p[k] + "</td>");
+          });
+        });
+      }
     }
    });
+
+  $("#create_random").on("click", function(e) {
+    e.preventDefault();
+    var writer = transit.writer("json-verbose");
+    var data = { "post": {
+      "title": getRandom(["A random title", "Some random title"]),
+      "text":  getRandom(["A random body", "Some random body", "Hello there!"]),
+      "published_at": new Date()
+      }
+    };
+    $.ajax(this.href, {
+      headers: {
+        "Accept": "application/transit+json; charset=utf-8",
+        "Content-Type": "application/transit+json; charset=utf-8"
+      },
+      type: "POST",
+      dataType: "text",
+      data: writer.write(data)
+    }).done(function(data) {
+      var reader = transit.reader("json");
+      var parsed = reader.read(data);
+      console.log(parsed.toString());
+    });
+  });
 </script>

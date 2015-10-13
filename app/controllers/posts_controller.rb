@@ -42,8 +42,7 @@ class PostsController < ApplicationController
         end
       end
       format.transit do
-        val =  Transit::Reader.new(:json, request.body).read
-        render transit: val
+        render transit: @post
       end
     end
   end
