@@ -7,11 +7,9 @@ class PostsController < ApplicationController
 
     respond_to do |f|
       f.html
-
       f.transit do
         render transit: @posts, verbose: params[:verbose]
       end
-
       f.json do
         render json: @posts
       end
@@ -33,12 +31,12 @@ class PostsController < ApplicationController
 
   # POST /posts
   def create
+    @post = Post.new(post_params)
+    success = @post.save
     respond_to do |format|
       format.html do
-        @post = Post.new(post_params)
-
-        if @post.save
-          redirect_to @post, notice: 'Post was successfully created.'
+        if success
+          redirect_to posts_url, notice: 'Post was successfully created.'
         else
           render :new
         end
@@ -52,10 +50,18 @@ class PostsController < ApplicationController
 
   # PATCH/PUT /posts/1
   def update
-    if @post.update(post_params)
-      redirect_to @post, notice: 'Post was successfully updated.'
-    else
-      render :edit
+    success = @post.update_attributes(post_params)
+    respond_to do |format|
+      format.html do
+        if success
+          redirect_to posts_url, notice: 'Post was successfully updated.'
+        else
+          render :edit
+        end
+      end
+      format.transit do
+        render transit: @post
+      end
     end
   end
 
